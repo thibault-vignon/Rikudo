@@ -1,0 +1,43 @@
+import java.util.ArrayList;
+
+import javafx.scene.chart.LineChart;
+
+public class Compare {
+
+	public static void main(String[] args) {
+		int attempts = 10;
+		int correct = 0;
+	    int incorrect = 0;
+	    ArrayList<ArrayList<Boolean>> graph = new ArrayList<ArrayList<Boolean>>();
+		ArrayList<Boolean> ligne = new ArrayList<Boolean>();
+		
+		 for (int n = 2; n < 100; n++) {
+			    
+			    for (int a = 0; a < attempts; a++) {
+			    	
+			    	graph.clear();
+			    	for (int i = 0; i < n; i++) {
+			    		ligne = new ArrayList<Boolean>();
+			    		for (int k = 0; k < n; k++) {
+			    			if (Math.random() < 0.5) {
+			    				ligne.add(true);
+			    			}
+			    			else {
+			    				ligne.add(false);
+			    			}
+			    		}
+			    		graph.add(ligne);
+			    	}
+			    	
+			    	Backtracking.solveBacktracking(graph, 0);
+			    	totalTime = (endTime - startTime) / 1000 ;
+			    	
+			    	sum += totalTime;
+			    }
+			    	
+			    	random.getData().add(new LineChart.Data(n, sum / attempts));
+			    }
+
+	}
+
+}

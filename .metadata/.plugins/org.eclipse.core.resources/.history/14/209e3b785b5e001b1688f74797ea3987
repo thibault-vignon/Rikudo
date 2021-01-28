@@ -1,0 +1,32 @@
+
+	import javafx.application.Application;
+	import javafx.stage.Stage;   
+	import javafx.scene.*;
+	import javafx.scene.chart.NumberAxis;
+	import javafx.scene.chart.LineChart;
+	import javafx.scene.chart.XYChart;
+	
+public class Test {
+
+	@Override
+	public void start(Stage stage) {
+		
+	    	NumberAxis xAxis= new NumberAxis(500, 1000, 100);
+	    	NumberAxis yAxis= new NumberAxis(250, 600, 10);
+
+		    xAxis.setLabel("Number of vertices");
+		    yAxis.setLabel("Runtime");
+
+		    LineChart<Number, Number> graphe = new LineChart<>(xAxis, yAxis);
+		    graphe.setTitle("Runtime for different types of graphs");
+		    
+		    LineChart.Series data = new LineChart.Series();
+		    data.setName("data");
+		    
+	}
+	
+	public static void main(String[] args) {
+		
+	}
+
+}

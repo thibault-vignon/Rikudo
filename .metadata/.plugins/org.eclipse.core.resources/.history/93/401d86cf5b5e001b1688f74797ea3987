@@ -1,0 +1,49 @@
+
+	import javafx.application.Application;
+	import javafx.stage.Stage;   
+	import javafx.scene.*;
+	import javafx.scene.chart.NumberAxis;
+	import javafx.scene.chart.LineChart;
+	import javafx.scene.chart.XYChart;
+	
+public class Test {
+
+	@Override
+	public void start(Stage stage) {
+		
+			long startTime = 0;
+			long endTime = 0;
+			long totalTime = 0;
+		
+	    	NumberAxis xAxis= new NumberAxis(0, 40, 5);
+	    	NumberAxis yAxis= new NumberAxis(0, 1000, 100);
+
+		    xAxis.setLabel("Number of vertices");
+		    yAxis.setLabel("Runtime");
+
+		    LineChart<Number, Number> graphe = new LineChart<>(xAxis, yAxis);
+		    graphe.setTitle("Runtime for different types of graphs");
+		    
+		    LineChart.Series complete = new LineChart.Series();
+		    complete.setName("Complete graphs");
+		    
+		    LineChart.Series grid = new LineChart.Series();
+		    grid.setName("Grid graphs");
+		    
+		    LineChart.Series cycle = new LineChart.Series();
+		    cycle.setName("Cycle graphs");
+		    
+		    for (int n = 2; n < 40; n++) {
+		    	
+		    	startTime = System.currentTimeMillis();
+
+		    	endTime = System.currentTimeMillis();
+		    	totalTime = endTime - startTime;
+		    }
+	}
+	
+	public static void main(String[] args) {
+		
+	}
+
+}

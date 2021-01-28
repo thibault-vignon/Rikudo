@@ -1,0 +1,410 @@
+import org.sat4j.core.VecInt;
+import java.util.ArrayList;
+import org.sat4j.minisat.SolverFactory;
+import org.sat4j.specs.ISolver;
+import org.sat4j.specs.ContradictionException;
+import org.sat4j.specs.TimeoutException;
+
+
+public class SAT {
+
+	public static int[] solveSAT(ArrayList<ArrayList<Boolean>> graph){
+		// Takes as input a graph represented by its adjacency matrix
+		int n = graph.size();
+		
+		// Create the solver 
+				ISolver solver = SolverFactory.newDefault();
+				// Convert the Hamiltonian path problem to a CNF
+				// Then feed the solver using arrays of int in Dimacs format
+				// Boolean x_ij (node j in position i) is represented by the integer i*n + j + 1
+				try {
+					// Each node j must appear in the path :
+					for (int j = 0; j < n; j++) {
+						VecInt v = new VecInt();
+						for (int i = 0; i < n; i++) {
+							v.insertFirst(i*n + j + 1);
+						}
+						solver.addClause(v);
+					}
+					
+					// No node j appears twice in the path
+					for (int j = 0; j < n; j++) {
+						for (int i = 0; i < n; i++) {
+							for (int k = 0; k < n; k++) {
+								if (i != k) {
+									VecInt v = new VecInt();
+									v.insertFirst(-(i*n + j + 1));
+									v.insertFirst(-(k*n + j + 1));
+									solver.addClause(v);
+								}
+							}
+						}
+					}
+					
+					// Every position i on the path must be occupied 
+					for (int i = 0; i < n; i++) {
+						VecInt v = new VecInt();
+						for (int j = 0; j < n; j++) {
+							v.insertFirst(i*n + j +1);
+						}
+						solver.addClause(v);
+					}
+					
+					// No two nodes j and k occupy the same position
+					for (int i = 0; i < n; i++) {
+						for (int j = 0; j < n; j++) {
+							for (int k = 0; k < n; k++) {
+								if (j != k) {
+									VecInt v = new VecInt();
+									v.insertFirst(-(i*n + j + 1));
+									v.insertFirst(-(i*n + k + 1));
+									solver.addClause(v);
+								}
+							}
+						}
+					}
+					
+					// Nonadjacent nodes i and j cannot be adjacent in the path
+					for (int k = 0; k<n - 1; k++) {
+						for (int i = 0; i < n; i++) {
+							for (int j = 0; j < n; j++) {
+								if (! graph.get(i).get(j)) {
+									VecInt v = new VecInt();
+									v.insertFirst(-(k*n + i + 1));
+									v.insertFirst(-((k+1)*n + j + 1));
+									solver.addClause(v);
+								}
+							}
+						}
+					}
+					
+				} catch (ContradictionException e1) {
+					e1.printStackTrace();
+				}
+				// Print parameters of the problem
+				System.out.println("Number of variables: " + solver.nVars());
+				System.out.println("Number of constraints: " + solver.nConstraints());
+				// Solve the problem
+				try {
+					if (solver.isSatisfiable()) {
+						System.out.println("Satisfiable problem!");
+						int[] solution = solver.model();
+						
+						// Translate the solution to a path and print it
+						int [] path = new int[n];
+						String chemin = "Solution";
+						for (int i = 0; i < n; i++) {
+							for (int j = 0; j < n; j++) {
+								if (solution[i*n + j] > 0) {
+									path[i] = j + 1;
+									chemin = chemin + " ";
+									chemin = chemin + (j + 1);
+								}
+							}
+						}
+						System.out.println(chemin);
+						return(path);
+						
+					} else {
+						System.out.println("Unsatisfiable problem!");
+						return(new int[0]);
+					}
+				} catch (TimeoutException e) {
+					System.out.println("Timeout, sorry!");
+					return(new int[0]);
+				}
+			}
+	
+	//And a version which looks for a Hamiltonian cycle rather than a path
+	//We only have to add the condition that the last node must be adjacent to the first one
+	
+	public static int[] solveSATCycle(ArrayList<ArrayList<Boolean>> graph){
+		// Takes as input a graph represented by its adjacency matrix
+		int n = graph.size();
+		
+		// Create the solver 
+				ISolver solver = SolverFactory.newDefault();
+				// Convert the Hamiltonian cycle problem to a CNF
+				// Then feed the solver using arrays of int in Dimacs format
+				// Boolean x_ij (node j in position i) is represented by the integer i*n + j
+				try {
+					// Each node j must appear in the path :
+					for (int j = 0; j < n; j++) {
+						VecInt v = new VecInt();
+						for (int i = 0; i < n; i++) {
+							v.insertFirst(i*n + j + 1);
+						}
+						solver.addClause(v);
+					}
+					
+					// No node j appears twice in the path
+					for (int j = 0; j < n; j++) {
+						for (int i = 0; i < n; i++) {
+							for (int k = 0; k < n; k++) {
+								if (i != k) {
+									VecInt v = new VecInt();
+									v.insertFirst(-(i*n + j + 1));
+									v.insertFirst(-(k*n + j + 1));
+									solver.addClause(v);
+								}
+							}
+						}
+					}
+					
+					// Every position i on the path must be occupied 
+					for (int i = 0; i < n; i++) {
+						VecInt v = new VecInt();
+						for (int j = 0; j < n; j++) {
+							v.insertFirst(i*n + j +1);
+						}
+						solver.addClause(v);
+					}
+					
+					// No two nodes j and k occupy the same position
+					for (int i = 0; i < n; i++) {
+						for (int j = 0; j < n; j++) {
+							for (int k = 0; k < n; k++) {
+								if (j != k) {
+									VecInt v = new VecInt();
+									v.insertFirst(-(i*n + j + 1));
+									v.insertFirst(-(i*n + k + 1));
+									solver.addClause(v);
+								}
+							}
+						}
+					}
+					
+					// Nonadjacent nodes i and j cannot be adjacent in the path
+						for (int i = 0; i < n; i++) {
+							for (int j = 0; j < n; j++) {
+								if (! graph.get(i).get(j)) {
+									for (int k = 0; k<n - 1; k++) {
+										VecInt v = new VecInt();
+										v.insertFirst(-(k*n + i + 1));
+										v.insertFirst(-((k+1)*n + j + 1));
+										solver.addClause(v);
+									}
+								
+								
+								//Condition for a cycle
+								VecInt v = new VecInt();
+								v.insertFirst(-((n-1)*n + i + 1));
+								v.insertFirst(-(j + 1));
+								solver.addClause(v);
+								}
+							}
+						}
+					
+				} catch (ContradictionException e1) {
+					e1.printStackTrace();
+				}
+				// Print parameters of the problem
+				System.out.println("Number of variables: " + solver.nVars());
+				System.out.println("Number of constraints: " + solver.nConstraints());
+				// Solve the problem
+				try {
+					if (solver.isSatisfiable()) {
+						System.out.println("Satisfiable problem!");
+						int[] solution = solver.model();
+						
+						// Translate the solution to a path and print it
+						int [] path = new int[n];
+						String chemin = "Solution";
+						for (int i = 0; i < n; i++) {
+							for (int j = 0; j < n; j++) {
+								if (solution[i*n + j] > 0) {
+									path[i] = j + 1;
+									chemin = chemin + " ";
+									chemin = chemin + (j + 1);
+								}
+							}
+						}
+						System.out.println(chemin);
+						return(path);
+						
+					} else {
+						System.out.println("Unsatisfiable problem!");
+						return(new int[0]);
+					}
+				} catch (TimeoutException e) {
+					System.out.println("Timeout, sorry!");
+					return(new int[0]);
+				}
+			}
+	
+	
+	public static int[] rikudoSAT(ArrayList<ArrayList<Boolean>> graph, ArrayList<ArrayList<Boolean>> diamonds, ArrayList<Integer> lambda){
+		// Takes as input:
+		//a graph represented by its adjacency matrix
+				int n = graph.size();
+		//a matrix indicating whether there is a diamond between nodes i and j
+		//an array in which the k-th value is null if there is no node labeled k, and the node labeled k otherwise
+				
+				// Create the solver 
+						ISolver solver = SolverFactory.newDefault();
+						// Convert the Rikudo problem to a CNF
+						// Then feed the solver using arrays of int in Dimacs format
+						// Boolean x_ij (node j in position i) is represented by the integer i*n + j
+						try {
+							// Each node j must appear in the path :
+							for (int j = 0; j < n; j++) {
+								VecInt v = new VecInt();
+								for (int i = 0; i < n; i++) {
+									v.insertFirst(i*n + j + 1);
+								}
+								solver.addClause(v);
+							}
+							
+							// No node j appears twice in the path
+							for (int j = 0; j < n; j++) {
+								for (int i = 0; i < n; i++) {
+									for (int k = 0; k < n; k++) {
+										if (i != k) {
+											VecInt v = new VecInt();
+											v.insertFirst(-(i*n + j + 1));
+											v.insertFirst(-(k*n + j + 1));
+											solver.addClause(v);
+										}
+									}
+								}
+							}
+							
+							// Every position i on the path must be occupied 
+							for (int i = 0; i < n; i++) {
+								VecInt v = new VecInt();
+								for (int j = 0; j < n; j++) {
+									v.insertFirst(i*n + j +1);
+								}
+								solver.addClause(v);
+							}
+							
+							// No two nodes j and k occupy the same position
+							for (int i = 0; i < n; i++) {
+								for (int j = 0; j < n; j++) {
+									for (int k = 0; k < n; k++) {
+										if (j != k) {
+											VecInt v = new VecInt();
+											v.insertFirst(-(i*n + j + 1));
+											v.insertFirst(-(i*n + k + 1));
+											solver.addClause(v);
+										}
+									}
+								}
+							}
+							
+							// Nonadjacent nodes i and j cannot be adjacent in the path
+								for (int i = 0; i < n; i++) {
+									for (int j = 0; j < n; j++) {
+										if (! graph.get(i).get(j)) {
+											for (int k = 0; k<n - 1; k++) {
+												VecInt v = new VecInt();
+												v.insertFirst(-(k*n + i + 1));
+												v.insertFirst(-((k+1)*n + j + 1));
+												solver.addClause(v);
+											}
+										}
+									}
+								}
+							// Condition caused by the diamonds 
+								for (int i = 0; i < n; i++) {
+									for (int j = 0; j < i; j++) {
+										if (diamonds.get(i).get(j)) {
+											VecInt v = new VecInt();
+											v.insertFirst(-(i+1));
+											v.insertFirst(n + j + 1);
+											solver.addClause(v);
+											for (int k = 1; k<n - 1; k++) {
+												VecInt v2 = new VecInt();
+												v2.insertFirst(-(k*n + i + 1));
+												v2.insertFirst((k+1)*n + j + 1);
+												v2.insertFirst((k-1)*n + j + 1);
+												solver.addClause(v2);
+											}
+											VecInt v3 = new VecInt();
+											v3.insertFirst(-(n*(n-1) + i+1));
+											v3.insertFirst(n*(n-2) + j + 1);
+											solver.addClause(v3);
+										}
+									}
+								}
+								
+							// Condition caused by the labels
+								for (int i = 0; i < n; i++) {
+									if (lambda.get(i) != null) {
+										VecInt v = new VecInt();
+										v.insertFirst(lambda.get(i)*n + i +1);
+										solver.addClause(v);
+									}
+								}
+							
+						} catch (ContradictionException e1) {
+							e1.printStackTrace();
+						}
+						// Print parameters of the problem
+						System.out.println("Number of variables: " + solver.nVars());
+						System.out.println("Number of constraints: " + solver.nConstraints());
+						// Solve the problem
+						try {
+							if (solver.isSatisfiable()) {
+								System.out.println("Satisfiable problem!");
+								int[] solution = solver.model();
+								
+								// Translate the solution to a path and print it
+								int [] path = new int[n];
+								String chemin = "Solution";
+								for (int i = 0; i < n; i++) {
+									for (int j = 0; j < n; j++) {
+										if (solution[i*n + j] > 0) {
+											path[i] = j + 1;
+											chemin = chemin + " ";
+											chemin = chemin + (j + 1);
+										}
+									}
+								}
+								System.out.println(chemin);
+								return(path);
+								
+							} else {
+								System.out.println("Unsatisfiable problem!");
+								return(new int[0]);
+							}
+						} catch (TimeoutException e) {
+							System.out.println("Timeout, sorry!");
+							return(new int[0]);
+						}
+					}
+
+		public static void main(String[] args) {
+			ArrayList<ArrayList<Boolean>> graph = new ArrayList<ArrayList<Boolean>>();
+			
+			ArrayList<Boolean> ligne1 = new ArrayList<Boolean>();
+			ligne1.add(false);
+			ligne1.add(true);
+			ligne1.add(true);
+			ligne1.add(false);
+			graph.add(ligne1);
+			
+			ArrayList<Boolean> ligne2 = new ArrayList<Boolean>();
+			ligne2.add(true);
+			ligne2.add(false);
+			ligne2.add(false);
+			ligne2.add(true);
+			graph.add(ligne2);
+			
+			ArrayList<Boolean> ligne3 = new ArrayList<Boolean>();
+			ligne3.add(true);
+			ligne3.add(false);
+			ligne3.add(false);
+			ligne3.add(true);
+			graph.add(ligne3);
+			
+			ArrayList<Boolean> ligne4 = new ArrayList<Boolean>();
+			ligne4.add(false);
+			ligne4.add(true);
+			ligne4.add(true);
+			ligne4.add(false);
+			graph.add(ligne4);
+			
+			solveSAT(graph);
+		}
+	}
