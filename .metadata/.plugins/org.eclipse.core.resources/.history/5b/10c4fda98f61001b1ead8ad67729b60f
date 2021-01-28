@@ -332,7 +332,7 @@ public class SAT {
 								for (int i = 0; i < n; i++) {
 									if (lambda.get(i) != null) {
 										VecInt v = new VecInt();
-										v.insertFirst(i*n + lambda.get(i) +1);
+										v.insertFirst(lambda.get(i)*n + i +1);
 										solver.addClause(v);
 									}
 								}
@@ -375,45 +375,7 @@ public class SAT {
 					}
 
 		public static void main(String[] args) {
-			
 			ArrayList<ArrayList<Boolean>> graph = new ArrayList<ArrayList<Boolean>>();
-			
-			ArrayList<ArrayList<Boolean>> diamonds = new ArrayList<ArrayList<Boolean>>();
-			ArrayList<Boolean> ligne = new ArrayList<Boolean>();
-			ligne.add(false);
-			ligne.add(false);
-			ligne.add(true);
-			ligne.add(false);
-			diamonds.add(ligne);
-			
-			ligne = new ArrayList<Boolean>();
-			ligne.add(false);
-			ligne.add(false);
-			ligne.add(false);
-			ligne.add(false);
-			diamonds.add(ligne);
-			
-			ligne = new ArrayList<Boolean>();
-			ligne.add(true);
-			ligne.add(false);
-			ligne.add(false);
-			ligne.add(false);
-			diamonds.add(ligne);
-			
-			ligne = new ArrayList<Boolean>();
-			ligne.add(false);
-			ligne.add(false);
-			ligne.add(false);
-			ligne.add(false);
-			diamonds.add(ligne);
-			
-			
-			ArrayList<Integer> lambda = new ArrayList<Integer>();
-			lambda.add(1);
-			lambda.add(null);
-			lambda.add(null);
-			lambda.add(0);
-			
 			
 			ArrayList<Boolean> ligne1 = new ArrayList<Boolean>();
 			ligne1.add(false);
@@ -443,6 +405,6 @@ public class SAT {
 			ligne4.add(false);
 			graph.add(ligne4);
 			
-			rikudoSAT(graph, diamonds, lambda);
+			solveSAT(graph);
 		}
 	}
