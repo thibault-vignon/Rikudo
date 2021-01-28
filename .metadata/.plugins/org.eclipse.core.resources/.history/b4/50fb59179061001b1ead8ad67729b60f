@@ -332,7 +332,7 @@ public class SAT {
 								for (int i = 0; i < n; i++) {
 									if (lambda.get(i) != null) {
 										VecInt v = new VecInt();
-										v.insertFirst(i*n + lambda.get(i) +1);
+										v.insertFirst(lambda.get(i)*n + i +1);
 										solver.addClause(v);
 									}
 								}
@@ -409,7 +409,7 @@ public class SAT {
 			
 			
 			ArrayList<Integer> lambda = new ArrayList<Integer>();
-			lambda.add(1);
+			lambda.add(3);
 			lambda.add(null);
 			lambda.add(null);
 			lambda.add(0);

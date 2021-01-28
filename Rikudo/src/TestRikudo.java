@@ -1,0 +1,175 @@
+import java.util.ArrayList;
+
+	import javafx.application.Application;
+	import javafx.stage.Stage;   
+	import javafx.scene.chart.NumberAxis;
+	import javafx.scene.Scene;
+	import javafx.scene.chart.LineChart;
+	
+public class TestRikudo extends Application {
+
+	@Override
+	public void start(Stage stage) {
+		
+			long startTime = 0;
+			long endTime = 0;
+			long totalTime = 0;
+			
+			ArrayList<ArrayList<Boolean>> graph = new ArrayList<ArrayList<Boolean>>();
+			ArrayList<Boolean> ligne = new ArrayList<Boolean>();
+			
+			ArrayList<ArrayList<Boolean>> diamonds = new ArrayList<ArrayList<Boolean>>();
+			ArrayList<Integer> lambda = new ArrayList<Integer>();
+			
+			long sum = 0;
+			final int attempts = 20;
+			final int limit = 30;
+		
+	    	NumberAxis xAxis= new NumberAxis(0, limit + 5, 5);
+	    	NumberAxis yAxis= new NumberAxis(0, 200, 10);
+
+		    xAxis.setLabel("Number of vertices");
+		    yAxis.setLabel("Runtime (milliseconds)");
+
+		    LineChart<Number, Number> chart = new LineChart<>(xAxis, yAxis);
+		    chart.setTitle("Runtime of SAT solver for different types of graphs");
+		    
+		    LineChart.Series complete = new LineChart.Series();
+		    complete.setName("Complete graphs");
+		    
+		    LineChart.Series grid = new LineChart.Series();
+		    grid.setName("Grid graphs");
+		    
+		    LineChart.Series cycle = new LineChart.Series();
+		    cycle.setName("Cycle graphs");
+		    
+		    SAT.solveSAT(graph);
+		    
+		    //First we test complete graphs : we build them for different 
+		    //Numbers of vertices and measure the execution time of our solver
+		    
+		    for (int n = 2; n < limit + 1; n++) {
+		    	
+		    	sum = 0;
+			    
+			    for (int a = 0; a < attempts; a++) {
+			    	
+		    	graph.clear();
+		    	for (int i = 0; i < n; i++) {
+		    		ligne = new ArrayList<Boolean>();
+		    		for (int k = 0; k < n; k++) {
+		    			if (k==i) {
+		    				ligne.add(false);
+		    			}
+		    			else {
+		    				ligne.add(true);
+		    			}
+		    		}
+		    		graph.add(ligne);
+		    	}
+		    	
+		    	startTime = System.currentTimeMillis();
+		    	SAT.rikudoSAT(graph, diamonds, lambda);
+		    	endTime = System.currentTimeMillis();
+		    	totalTime = endTime - startTime;
+		    	
+		    	sum += totalTime;
+			    }
+		    	
+		    	complete.getData().add(new LineChart.Data(n, sum / attempts));
+		    }
+		    
+		    chart.getData().add(complete);
+		    
+		    //Now we test cycle graphs
+		    
+		    for (int n = 2; n < limit + 1; n++) {
+		    
+		    sum = 0;
+		    
+		    for (int a = 0; a < attempts; a++) {
+		    	
+		    	graph.clear();
+		    	for (int i = 0; i < n; i++) {
+		    		ligne = new ArrayList<Boolean>();
+		    		for (int k = 0; k < n; k++) {
+		    			if (k == (i+1) % n) {
+		    				ligne.add(true);
+		    			}
+		    			else {
+		    				ligne.add(false);
+		    			}
+		    		}
+		    		graph.add(ligne);
+		    	}
+		    	
+		    	startTime = System.currentTimeMillis();
+		    	SAT.solveSAT(graph);
+		    	endTime = System.currentTimeMillis();
+		    	totalTime = endTime - startTime;
+		    	
+		    	sum += totalTime;
+		    }
+		    	
+		    	cycle.getData().add(new LineChart.Data(n, sum / attempts));
+		    }
+		    
+		    chart.getData().add(cycle);
+		    
+		    //Now we test grid graphs
+		    
+		    for (int n = 2; n < (int) (Math.sqrt(limit)) + 1; n++) {
+		    	
+		    	sum = 0;
+			    
+			    for (int a = 0; a < attempts; a++) {
+			    	
+		    	graph.clear();
+		    	for (int i = 0; i < n*n ; i++) {
+		    		ligne = new ArrayList<Boolean>();
+		    			if (i % n == 0) {
+		    				for (int k = 0; k < n * n; k++) {
+		    					if (k == i + 1 || k == i + n || k == i - n) { ligne.add(true); }
+		    					else { ligne.add(false); }
+		    				}
+		    			}
+		    			else {if (i % n == n - 1) 
+		    				for (int k = 0; k < n * n; k++) {
+		    					if (k == i - 1 || k == i + n || k == i - n) { ligne.add(true); }
+		    					else { ligne.add(false); }
+		    				}
+		    			
+		    			else {
+		    				for (int k = 0; k < n * n; k++) {
+		    					if (k == i - 1 || k == i+1 || k == i + n || k == i - n) { ligne.add(true); }
+		    					else { ligne.add(false); }
+		    				}
+		    			}
+		    		}
+		    		graph.add(ligne);
+		    	}
+
+		    	startTime = System.currentTimeMillis();
+		    	SAT.solveSAT(graph);
+		    	endTime = System.currentTimeMillis();
+		    	totalTime = endTime - startTime;
+		    	
+		    	sum += totalTime;
+		    	
+			    }
+		    	
+		    	grid.getData().add(new LineChart.Data(n * n, sum / attempts));
+		    }
+		    
+		    chart.getData().add(grid);
+		    
+		    Scene view = new Scene(chart, 1000, 600);
+		    stage.setScene(view);
+		    stage.show();
+	}
+	
+	public static void main(String[] args) {
+		launch(args);
+	}
+
+}
