@@ -10,7 +10,7 @@ public class NewBacktracking {
 		if (s==t && n==(graph.size() - 1)) {
 			return 1;
 		}
-		
+
 		int number_paths = 0;
 		autorisation.set(s, false);
 		

@@ -10,7 +10,7 @@ public class NewBacktracking {
 		if (s==t && n==(graph.size() - 1)) {
 			return 1;
 		}
-		
+
 		int number_paths = 0;
 		autorisation.set(s, false);
 		
@@ -18,7 +18,7 @@ public class NewBacktracking {
 			if (autorisation.get(graph.get(s).get(i))) {
 				int a = auxBacktracking(graph, graph.get(s).get(i), t, n+1, countPaths, k);
 				if (a>0) {
-					path.set(n + 1, graph.get(s).get(i));
+					path.set(n + 1, graph, graph.get(s).get(i));
 					number_paths += a;
 					if (!countPaths && number_paths >= k) {break;}
 				}
