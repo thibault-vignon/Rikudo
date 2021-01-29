@@ -56,10 +56,14 @@ public class Backtracking {
 			s = path[k-1];
 			// on remet les arcs qui vont vers path[k]
 			for (int i =0; i<n; i+=1) {
-				graph2.get(i).set(path[k], graph.get(i).get(path[k]));
+				ArrayList<Boolean> ligne = graph2.get(i);
+				ligne.set(path[k], graph.get(i).get(path[k]));
+				graph2.get(i).set(path[k], ligne);
 			}
 			// on supprime provisoirement l'arc qu'on vient de remonter
-			graph2.get(path[k-1]).set(path[k], false); 
+			ArrayList<Boolean> ligne2 = graph2.get(path[k-1]);
+			ligne2.set(path[k], false);
+			graph2.set(path[k-1], ligne2); 
 			
 			
 			// on remet les arcs qui partent de path[k]
@@ -75,7 +79,9 @@ public class Backtracking {
 			k+=1;
 
 			for (int i =0; i<n; i+=1) {
-				graph2.get(i).set(j, false);
+				ArrayList<Boolean> ligne = graph2.get(i);
+				ligne.set(j, false);
+				graph2.set(i, ligne);
 			}
 			s = j;	
 		}
@@ -151,8 +157,6 @@ public class Backtracking {
 		
 		while (k>0 ) {
 		
-		System.out.println(graph3.get(1).get(2));
-	
 		if (s==t && k==n) {
 			compteur +=1;
 		}
@@ -202,6 +206,10 @@ public class Backtracking {
 			}
 			s = j;	
 		}
+		 
+		
+		
+		
 		
 	}
 		System.out.println("compteur=" + compteur);
