@@ -133,7 +133,6 @@ public class Backtracking {
 		// on crée une copie du graphe
 		
 		ArrayList<ArrayList<Boolean>> graph2 = new ArrayList<ArrayList<Boolean>>();
-		ArrayList<ArrayList<Boolean>> graph3 = new ArrayList<ArrayList<Boolean>>();
 		
 		
 		for (int i = 0; i<n; i+=1) {
@@ -143,7 +142,6 @@ public class Backtracking {
 			ligne2.addAll(ligne);
 			
 			graph2.add(i, ligne2);
-			graph3.add(i, ligne2);
 		}
 		
 		
@@ -167,6 +165,7 @@ public class Backtracking {
 		int j = 0;
 		while (j<n && ! graph2.get(s).get(j)) {
 			j+=1;
+			
 		}
 		
 		
@@ -182,17 +181,20 @@ public class Backtracking {
 			
 			// on remet les arcs qui vont vers path[k]
 			for (int i =0; i<n; i+=1) {
-				graph2.get(i).set(path[k], graph.get(i).get(path[k]));
-				graph3.get(i).set(path[k], graph.get(i).get(path[k]));
+				ArrayList<Boolean> ligne = graph2.get(i);
+				ligne.set(path[k], graph.get(i).get(path[k]));
+				graph2.set(i, ligne);
 			}
 			// on interdit provisoirement l'arc qu'on vient de remonter
-			graph2.get(s).set(path[k], false);
+			ArrayList<Boolean> ligne = graph2.get(s);
+			ligne.set(path[k], false);
+			graph2.set(s, ligne);
 			
 			// on réautorise les arcs qui en partent
 			
 			ArrayList<Boolean> ligne3 = graph2.get(path[k]);
 			for (int i=0; i<n; i+=1) {
-					ligne3.set(i, graph3.get(path[k]).get(i));
+				ligne3.set(i, graph.get(path[k]).get(i));
 			}
 			graph2.set(path[k], ligne3); 
 			
@@ -200,7 +202,7 @@ public class Backtracking {
 		}
 		
 		else {
-			// on ajoute j au chemin et on supprime tous les arcs qui vont vers j$
+			// on ajoute j au chemin et on supprime tous les arcs qui vont vers j
 			path[k] = j;
 			k+=1;
 
@@ -208,9 +210,6 @@ public class Backtracking {
 				ArrayList<Boolean> ligne = graph2.get(i);
 				ligne.set(j, false);
 				graph2.set(i, ligne);
-				ArrayList<Boolean> ligne2 = graph3.get(i);
-				ligne2.set(j, false);
-				graph3.set(i, ligne2);
 			}
 			s = j;	
 		}
@@ -227,44 +226,15 @@ public class Backtracking {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		
 		int limit = 11;
 		int[] result = new int[limit - 2];
 		int attempts = 1;
 		ArrayList<ArrayList<Boolean>> graph = new ArrayList<ArrayList<Boolean>>();
 		ArrayList<Boolean> ligne = new ArrayList<Boolean>();
 		
-		 ArrayList<Boolean> ligne1 = new ArrayList<Boolean>();
-	        ligne1.add(false);
-	        ligne1.add(true);
-	        ligne1.add(false);
-	        ligne1.add(true);
-	        graph.add(ligne1);
-	       
-	        ArrayList<Boolean> ligne2 = new ArrayList<Boolean>();
-	        ligne2.add(true);
-	        ligne2.add(false);
-	        ligne2.add(true);
-	        ligne2.add(false);
-	        graph.add(ligne2);
-	       
-	        ArrayList<Boolean> ligne3 = new ArrayList<Boolean>();
-	        ligne3.add(false);
-	        ligne3.add(true);
-	        ligne3.add(false);
-	        ligne3.add(false);
-	        graph.add(ligne3);
-	       
-	        ArrayList<Boolean> ligne4 = new ArrayList<Boolean>();
-	        ligne4.add(false);
-	        ligne4.add(true);
-	        ligne4.add(false);
-	        ligne4.add(false);
-	        graph.add(ligne4);
-	        
-	        countBacktracking(graph, 0, 2);
-		
-		/* for (int n = 2; n < limit; n++) {
-			    System.out.println(n);
+		 for (int n = 2; n < limit; n++) {
+			    
 			    for (int a = 0; a < attempts; a++) {
 			    	
 		    	graph.clear();
@@ -297,7 +267,7 @@ public class Backtracking {
 		
 		 }
 		 
-		 System.out.println(result);*/
+		 System.out.println(result);
 	}
 
 }

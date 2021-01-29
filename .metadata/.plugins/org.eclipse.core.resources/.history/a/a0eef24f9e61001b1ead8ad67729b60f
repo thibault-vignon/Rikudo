@@ -182,11 +182,15 @@ public class Backtracking {
 			
 			// on remet les arcs qui vont vers path[k]
 			for (int i =0; i<n; i+=1) {
-				graph2.get(i).set(path[k], graph.get(i).get(path[k]));
+				ArrayList<Boolean> ligne = graph2.get(i);
+				ligne.set(path[k], graph.get(i).get(path[k]));
+				graph2.set(i, ligne);
 				graph3.get(i).set(path[k], graph.get(i).get(path[k]));
 			}
 			// on interdit provisoirement l'arc qu'on vient de remonter
-			graph2.get(s).set(path[k], false);
+			ArrayList<Boolean> ligne = graph2.get(s);
+			ligne.set(path[k], false);
+			graph2.set(s, ligne);
 			
 			// on réautorise les arcs qui en partent
 			
@@ -227,44 +231,15 @@ public class Backtracking {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		
 		int limit = 11;
 		int[] result = new int[limit - 2];
 		int attempts = 1;
 		ArrayList<ArrayList<Boolean>> graph = new ArrayList<ArrayList<Boolean>>();
 		ArrayList<Boolean> ligne = new ArrayList<Boolean>();
 		
-		 ArrayList<Boolean> ligne1 = new ArrayList<Boolean>();
-	        ligne1.add(false);
-	        ligne1.add(true);
-	        ligne1.add(false);
-	        ligne1.add(true);
-	        graph.add(ligne1);
-	       
-	        ArrayList<Boolean> ligne2 = new ArrayList<Boolean>();
-	        ligne2.add(true);
-	        ligne2.add(false);
-	        ligne2.add(true);
-	        ligne2.add(false);
-	        graph.add(ligne2);
-	       
-	        ArrayList<Boolean> ligne3 = new ArrayList<Boolean>();
-	        ligne3.add(false);
-	        ligne3.add(true);
-	        ligne3.add(false);
-	        ligne3.add(false);
-	        graph.add(ligne3);
-	       
-	        ArrayList<Boolean> ligne4 = new ArrayList<Boolean>();
-	        ligne4.add(false);
-	        ligne4.add(true);
-	        ligne4.add(false);
-	        ligne4.add(false);
-	        graph.add(ligne4);
-	        
-	        countBacktracking(graph, 0, 2);
-		
-		/* for (int n = 2; n < limit; n++) {
-			    System.out.println(n);
+		 for (int n = 2; n < limit; n++) {
+			    
 			    for (int a = 0; a < attempts; a++) {
 			    	
 		    	graph.clear();
@@ -297,7 +272,7 @@ public class Backtracking {
 		
 		 }
 		 
-		 System.out.println(result);*/
+		 System.out.println(result);
 	}
 
 }
