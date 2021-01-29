@@ -140,23 +140,16 @@ public class Backtracking {
 		}
 		
 		
-		
-		
-
-		
-		
 		// pour savoir si il n'y a plus de chemin hamiltonien possible : on est revenus à s et il n'a pas de voisin donc k=0
 		// quand on trouve un chemin : on incrémente
 	
 		
 		while (k>0 ) {
-		
-		System.out.println(graph3.get(1).get(2));
-	
+
 		if (s==t && k==n) {
 			compteur +=1;
+
 		}
-	
 		
 		// on cherche le premier voisin
 		int j = 0;
@@ -215,11 +208,12 @@ public class Backtracking {
 		int attempts = 1;
 		ArrayList<ArrayList<Boolean>> graph = new ArrayList<ArrayList<Boolean>>();
 		ArrayList<Boolean> ligne = new ArrayList<Boolean>();
-		
+
 		 ArrayList<Boolean> ligne1 = new ArrayList<Boolean>();
 	        ligne1.add(false);
 	        ligne1.add(true);
 	        ligne1.add(false);
+	        ligne1.add(true);
 	        ligne1.add(true);
 	        graph.add(ligne1);
 	       
@@ -228,11 +222,13 @@ public class Backtracking {
 	        ligne2.add(false);
 	        ligne2.add(true);
 	        ligne2.add(false);
+	        ligne2.add(false);
 	        graph.add(ligne2);
 	       
 	        ArrayList<Boolean> ligne3 = new ArrayList<Boolean>();
 	        ligne3.add(false);
 	        ligne3.add(true);
+	        ligne3.add(false);
 	        ligne3.add(false);
 	        ligne3.add(false);
 	        graph.add(ligne3);
@@ -242,7 +238,16 @@ public class Backtracking {
 	        ligne4.add(true);
 	        ligne4.add(false);
 	        ligne4.add(false);
+	        ligne4.add(true);
 	        graph.add(ligne4);
+	        
+	        ArrayList<Boolean> ligne5 = new ArrayList<Boolean>();
+	        ligne5.add(false);
+	        ligne5.add(true);
+	        ligne5.add(false);
+	        ligne5.add(true);
+	        ligne5.add(false);
+	        graph.add(ligne5);
 	        
 	        countBacktracking(graph, 0, 2);
 		

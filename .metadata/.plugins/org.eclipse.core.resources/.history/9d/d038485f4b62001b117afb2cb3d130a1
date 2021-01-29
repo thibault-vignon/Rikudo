@@ -1,0 +1,41 @@
+import java.util.ArrayList;
+
+public class NewBacktracking {
+	
+	public static void auxBacktracking(ArrayList<ArrayList<Integer>> graph, int s, int t, int k, int[] path) {
+		
+		
+		
+	}
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+			
+		ArrayList<ArrayList<Integer>> adja = new ArrayList<ArrayList<Integer>>();
+		
+		ArrayList<Integer> ligne1 = new ArrayList<Integer>();
+		ligne1.add(1);
+		ligne1.add(3);
+		adja.add(ligne1);
+		
+		ArrayList<Integer> ligne2 = new ArrayList<Integer>();
+		ligne2.add(0);
+		ligne2.add(2);
+		adja.add(ligne2);
+		
+		ArrayList<Integer> ligne3 = new ArrayList<Integer>();
+		ligne3.add(1);
+		ligne3.add(3);
+		adja.add(ligne3);
+		
+		ArrayList<Integer> ligne4 = new ArrayList<Integer>();
+		ligne4.add(1);
+		adja.add(ligne4);
+		
+		
+		solveBacktracking(adja,2);
+		
+	}
+
+}
+
