@@ -14,8 +14,8 @@ public class TestBacktracking extends Application {
 			long startTime = 0;
 			long endTime = 0;
 			long totalTime = 0;
-			ArrayList<ArrayList<Integer>> graph = new ArrayList<ArrayList<Integer>>();
-			ArrayList<Integer> ligne = new ArrayList<Integer>();
+			ArrayList<ArrayList<Boolean>> graph = new ArrayList<ArrayList<Boolean>>();
+			ArrayList<Boolean> ligne = new ArrayList<Boolean>();
 			
 			long sum = 0;
 			final int attempts = 20;
@@ -25,7 +25,7 @@ public class TestBacktracking extends Application {
 	    	NumberAxis yAxis= new NumberAxis(0, 3000, 10);
 
 		    xAxis.setLabel("Number of vertices");
-		    yAxis.setLabel("Runtime (milliseconds)");
+		    yAxis.setLabel("Runtime (microseconds)");
 
 		    LineChart<Number, Number> chart = new LineChart<>(xAxis, yAxis);
 		    chart.setTitle("Runtime of Backtracking solver for different types of graphs");
@@ -54,15 +54,20 @@ public class TestBacktracking extends Application {
 			    	
 		    	graph.clear();
 		    	for (int i = 0; i < n; i++) {
-		    		ligne = new ArrayList<Integer>();
+		    		ligne = new ArrayList<Boolean>();
 		    		for (int k = 0; k < n; k++) {
-		    				ligne.add(k);
+		    			if (k==i) {
+		    				ligne.add(false);
+		    			}
+		    			else {
+		    				ligne.add(true);
+		    			}
 		    		}
 		    		graph.add(ligne);
 		    	}
 		    	
 		    	startTime = System.nanoTime();
-		    	NewBacktracking.solveBacktracking(graph, 0, n-1);
+		    	Backtracking.solveBacktracking(graph, 0);
 		    	endTime = System.nanoTime();
 		    	totalTime = (endTime - startTime) / 1000 ;
 		    	
@@ -84,13 +89,20 @@ public class TestBacktracking extends Application {
 		    	
 		    	graph.clear();
 		    	for (int i = 0; i < n; i++) {
-		    		ligne = new ArrayList<Integer>();
-		    		ligne.add((i+1) % n);
+		    		ligne = new ArrayList<Boolean>();
+		    		for (int k = 0; k < n; k++) {
+		    			if (k == (i+1) % n) {
+		    				ligne.add(true);
+		    			}
+		    			else {
+		    				ligne.add(false);
+		    			}
+		    		}
 		    		graph.add(ligne);
 		    	}
 		    	
 		    	startTime = System.nanoTime();
-		    	NewBacktracking.solveBacktracking(graph, 0, n-1);
+		    	Backtracking.solveBacktracking(graph, 0);
 		    	endTime = System.nanoTime();
 		    	totalTime = (endTime - startTime) / 1000 ;
 		    	
@@ -112,22 +124,24 @@ public class TestBacktracking extends Application {
 			    	
 		    	graph.clear();
 		    	for (int i = 0; i < n*n ; i++) {
-		    		ligne = new ArrayList<Integer>();
+		    		ligne = new ArrayList<Boolean>();
 		    			if (i % n == 0) {
-		    				ligne.add(i+1);
-		    				if (i >= n) { ligne.add(i-n);}
-		    				if (i < n*(n-1)) {ligne.add(i+n);}
+		    				for (int k = 0; k < n * n; k++) {
+		    					if (k == i + 1 || k == i + n || k == i - n) { ligne.add(true); }
+		    					else { ligne.add(false); }
+		    				}
 		    			}
 		    			else {if (i % n == n - 1) {
-			    				ligne.add(i-1);
-			    				if (i >= n) { ligne.add(i-n);}
-			    				if (i < n*(n-1)) {ligne.add(i+n);}
+		    				for (int k = 0; k < n * n; k++) {
+		    					if (k == i - 1 || k == i + n || k == i - n) { ligne.add(true); }
+		    					else { ligne.add(false); }
+		    				}
 		    			}
 		    			else {
-		    				ligne.add(i+1);
-		    				ligne.add(i-1);
-		    				if (i >= n) { ligne.add(i-n);}
-		    				if (i < n*(n-1)) {ligne.add(i+n);}
+		    				for (int k = 0; k < n * n; k++) {
+		    					if (k == i - 1 || k == i+1 || k == i + n || k == i - n) { ligne.add(true); }
+		    					else { ligne.add(false); }
+		    				}
 		    			}
 		    		}
 		    		graph.add(ligne);
@@ -136,7 +150,7 @@ public class TestBacktracking extends Application {
 			    
 		    	
 		    	startTime = System.nanoTime();
-		    	NewBacktracking.solveBacktracking(graph, 0, n*n - 1);
+		    	Backtracking.solveBacktracking(graph, 0);
 		    	endTime = System.nanoTime();
 		    	totalTime = (endTime - startTime) / 1000 ;
 		    	
@@ -181,8 +195,9 @@ public class TestBacktracking extends Application {
 		    	
 		    	random.getData().add(new LineChart.Data(n, sum / attempts));
 		    }
-		    
-		    chart.getData().add(random);*/
+		    */
+		    chart.getData().add(random);
+		    System.out.println("d");
 		    Scene view = new Scene(chart, 1000, 600);
 		    stage.setScene(view);
 		    stage.show();

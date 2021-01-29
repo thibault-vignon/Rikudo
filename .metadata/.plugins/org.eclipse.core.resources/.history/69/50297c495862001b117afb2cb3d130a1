@@ -181,8 +181,8 @@ public class TestBacktracking extends Application {
 		    	
 		    	random.getData().add(new LineChart.Data(n, sum / attempts));
 		    }
-		    
-		    chart.getData().add(random);*/
+		    */
+		    chart.getData().add(random);
 		    Scene view = new Scene(chart, 1000, 600);
 		    stage.setScene(view);
 		    stage.show();

@@ -1,0 +1,78 @@
+import java.util.ArrayList;
+
+public class NewBacktracking {
+	
+	public static ArrayList<Boolean> autorisation = new ArrayList<Boolean>();
+	public static ArrayList<Integer> path = new ArrayList<Integer>();
+	
+	public static int auxBacktracking(ArrayList<ArrayList<Integer>> graph, int s, int t, int n, boolean countPaths, int k) {
+		
+		if (s==t && n==(graph.size() - 1)) {
+			return 1;
+		}
+		
+		int number_paths = 0;
+		autorisation.set(s, false);
+		
+		for (int i = 0; i < graph.get(s).size(); i++) {
+			if (autorisation.get(graph.get(s).get(i))) {
+				int a = auxBacktracking(graph, i, t, n+1, countPaths, k);
+				if (a>0) {
+					path.set(k + 1, i);
+					number_paths += a;
+					if (!countPaths && number_paths >= k) {break;}
+				}
+			}
+		}
+		
+		autorisation.set(s, true);
+		return(number_paths);
+	}
+	
+	public static ArrayList<Integer> solveBacktracking(ArrayList<ArrayList<Integer>> graph, int s, int t) {
+		path = new ArrayList<Integer>();
+		path.add(s);
+		for (int i = 0; i < graph.size() - 1; i++) {
+			path.add(-1);
+		}
+		if (auxBacktracking(graph, s, t, 0, false, 1) > 0) {
+			System.out.println("Satsifiable problem");
+			return(path);
+		}
+		else {
+			System.out.println("Unsatisfiable problem");
+			return(null);
+		}
+	}
+	
+	public static int countBacktracking(ArrayList<ArrayList<Integer>> graph, int s, int t) {
+		path = new ArrayList<Integer>();
+		path.add(s);
+		for (int i = 0; i < graph.size() - 1; i++) {
+			path.add(-1);
+		}
+		return auxBacktracking(graph, s, t, 0, true, 0);
+	}
+	
+	public static ArrayList<Integer> k_limit_Backtracking(ArrayList<ArrayList<Integer>> graph, int s, int t, int k) {
+		path = new ArrayList<Integer>();
+		path.add(s);
+		for (int i = 0; i < graph.size() - 1; i++) {
+			path.add(-1);
+		}
+		if (auxBacktracking(graph, s, t, 0, false, k) >= k) {
+			System.out.println("At least"+k+"paths");
+			return(path);
+		}
+		else {
+			System.out.println("Less than"+k+"paths");
+			return(null);
+		}
+	}
+	
+	
+	public static void main(String[] args) {
+		
+	}
+
+}

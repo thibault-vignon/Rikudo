@@ -10,7 +10,7 @@ public class NewBacktracking {
 		if (s==t && n==(graph.size() - 1)) {
 			return 1;
 		}
-
+		System.out.println(s);
 		int number_paths = 0;
 		autorisation.set(s, false);
 		
@@ -18,7 +18,7 @@ public class NewBacktracking {
 			if (autorisation.get(graph.get(s).get(i))) {
 				int a = auxBacktracking(graph, graph.get(s).get(i), t, n+1, countPaths, k);
 				if (a>0) {
-					path.set(n + 1, i);
+					path.set(k + 1, i);
 					number_paths += a;
 					if (!countPaths && number_paths >= k) {break;}
 				}
@@ -82,7 +82,6 @@ public class NewBacktracking {
 	
 	public static void main(String[] args) {
 		ArrayList<ArrayList<Integer>> graph = new ArrayList<ArrayList<Integer>>();
-		ArrayList<Integer> ligne;
 		
 		ArrayList<Integer> ligne0 = new ArrayList<Integer>();
 		ligne0.add(1);
@@ -108,37 +107,6 @@ public class NewBacktracking {
 		graph.add(ligne4);
 	        
 	       System.out.println(countBacktracking(graph, 0, 2));
-	       
-	    ArrayList<Integer> results = new ArrayList<Integer>();
-	       for (int n = 2; n < 8; n++) {
-			    	
-		    	graph.clear();
-		    	for (int i = 0; i < n*n ; i++) {
-		    		ligne = new ArrayList<Integer>();
-		    			if (i % n == 0) {
-		    				ligne.add(i+1);
-		    				if (i >= n) { ligne.add(i-n);}
-		    				if (i < n*(n-1)) {ligne.add(i+n);}
-		    			}
-		    			else {if (i % n == n - 1) {
-			    				ligne.add(i-1);
-			    				if (i >= n) { ligne.add(i-n);}
-			    				if (i < n*(n-1)) {ligne.add(i+n);}
-		    			}
-		    			else {
-		    				ligne.add(i+1);
-		    				ligne.add(i-1);
-		    				if (i >= n) { ligne.add(i-n);}
-		    				if (i < n*(n-1)) {ligne.add(i+n);}
-		    			}
-		    		}
-		    		graph.add(ligne);
-		    	}
-
-		    	results.add(NewBacktracking.countBacktracking(graph, 0, n*n - 1));
-			    }
-	       
-	       System.out.println(results);
 	}
 
 }

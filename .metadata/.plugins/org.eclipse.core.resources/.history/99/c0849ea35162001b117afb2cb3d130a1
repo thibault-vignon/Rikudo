@@ -1,0 +1,43 @@
+import java.util.ArrayList;
+
+public class NewBacktracking {
+	
+	public static ArrayList<Boolean> autorisation = new ArrayList<Boolean>();
+	public static ArrayList<Integer> path = new ArrayList<Integer>();
+	
+	public static int auxBacktracking(ArrayList<ArrayList<Integer>> graph, int s, int t, int k) {
+		
+		if (s==t && k==(graph.size() - 1)) {
+			return 1;
+		}
+		
+		int number_paths = 0;
+		autorisation.set(s, false);
+		
+		for (int i = 0; i < graph.get(s).size(); i++) {
+			if (autorisation.get(graph.get(s).get(i))) {
+				int a = auxBacktracking(graph, i, t, k+1);
+				if (a>0) {
+					path.set(k + 1, i);
+					number_paths += a;
+				}
+			}
+		}
+		
+		autorisation.set(s, true);
+		return(number_paths);
+	}
+	
+	public static void solveBacktracking(ArrayList<ArrayList<Integer>> graph, int s, int t, boolean numberOfPaths) {
+		path = new ArrayList<Integer>();
+		path.add(s);
+		for (int i = 0; i < graph.size() - 1; i++) {
+			path.add(-1);
+		}
+	}
+	
+	public static void main(String[] args) {
+		
+	}
+
+}

@@ -110,7 +110,7 @@ public class NewBacktracking {
 	       System.out.println(countBacktracking(graph, 0, 2));
 	       
 	    ArrayList<Integer> results = new ArrayList<Integer>();
-	       for (int n = 2; n < 8; n++) {
+	       for (int n = 2; n < 9; n++) {
 			    	
 		    	graph.clear();
 		    	for (int i = 0; i < n*n ; i++) {
@@ -136,9 +136,8 @@ public class NewBacktracking {
 		    	}
 
 		    	results.add(NewBacktracking.countBacktracking(graph, 0, n*n - 1));
+
 			    }
-	       
-	       System.out.println(results);
 	}
 
 }
